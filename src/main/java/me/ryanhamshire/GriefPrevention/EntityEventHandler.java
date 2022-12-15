@@ -1139,6 +1139,13 @@ public class EntityEventHandler implements Listener
                             {
                                 if (!tameable.getOwner().equals(attacker))
                                 {
+                                    Claim claim = this.dataStore.getClaimAt(event.getEntity().getLocation(), false, null);
+
+                                    //Except don't protect pets that are owned by players that aren't in a claims they have /containertrust to. (If configured as such)
+                                    if (instance.config_pvp_protectPets && claim.checkPermission(tameable.getOwner().getUniqueId(), ClaimPermission.Inventory, event) != null)
+                                        return;
+
+                                    //Otherwise, only let the wolf's target allow for attacking
                                     if (((Wolf) tameable).getTarget() != null)
                                     {
                                         if (((Wolf) tameable).getTarget() == attacker) return;
